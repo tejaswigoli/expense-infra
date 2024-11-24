@@ -55,22 +55,22 @@ pipeline {
             parallel {
                 stage('Alb') {
                     steps {
-                        build job: '60-alb', parameters: [string(name: 'ACTION', value: "apply")], wait: false
+                        build job: '60-alb', parameters: [string(name: 'ACTION', value: "destroy")], wait: false
                     }
                 }
                 stage('Acm') {
                     steps {
-                        build job: '50-acm', parameters: [string(name: 'ACTION', value: "apply")], wait: false
+                        build job: '50-acm', parameters: [string(name: 'ACTION', value: "destroy")], wait: false
                     }
                 }
                 stage('Eks') {
                     steps {
-                        build job: '40-eks', parameters: [string(name: 'ACTION', value: "apply")], wait: false
+                        build job: '40-eks', parameters: [string(name: 'ACTION', value: "destroy")], wait: false
                     }
                 }
                 stage('Bastion') {
                     steps {
-                        build job: '20-bastion', parameters: [string(name: 'ACTION', value: "apply")], wait: false
+                        build job: '20-bastion', parameters: [string(name: 'ACTION', value: "destroy")], wait: false
                     }
                 }
 
