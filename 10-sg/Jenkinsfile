@@ -28,10 +28,10 @@ pipeline {
         }
 
         stage('Apply or Destroy') {
-            input {
+            /* input {
                 message "Should we continue to ${params.ACTION}"
                 ok "Yes, we should."
-            }
+            } */
             steps {
                 withAWS(region: 'us-east-1', credentials: 'aws-creds') {
                     sh """
@@ -68,6 +68,21 @@ pipeline {
                 stage('EKS') {
                     steps {
                         build job: '40-eks', parameters: [string(name: 'ACTION', value: "apply")], wait: false
+                    }
+                }
+                stage('Acm') {
+                    steps {
+                        build job: '50-acm', parameters: [string(name: 'ACTION', value: "apply")], wait: false
+                    }
+                }
+                stage('Alb') {
+                    steps {
+                        build job: '60-alb', parameters: [string(name: 'ACTION', value: "apply")], wait: false
+                    }
+                }
+                stage('ECR') {
+                    steps {
+                        build job: '70-ecr', parameters: [string(name: 'ACTION', value: "apply")], wait: false
                     }
                 }
             }

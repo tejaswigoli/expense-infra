@@ -19,7 +19,7 @@ pipeline {
             steps {
                 withAWS(region: 'us-east-1', credentials: 'aws-creds') {
                     sh """
-                        cd 00-vpc
+                        cd 70-ecr
                         terraform init -reconfigure
                         terraform plan -out=tfplan
                     """
@@ -35,7 +35,7 @@ pipeline {
             steps {
                 withAWS(region: 'us-east-1', credentials: 'aws-creds') {
                     sh """
-                        cd 00-vpc
+                        cd 70-ecr
                         if [ ${params.ACTION} == 'apply' ]
                         then
                             terraform apply -auto-approve tfplan
@@ -47,12 +47,33 @@ pipeline {
                 }
             }
         }
-        stage ('Trigger SG') {
+
+        stage('Parallel In Sequential') {
             when {
-                expression { params.ACTION == 'apply' }
+                expression { params.ACTION == 'destroy' }
             }
-            steps{
-                build job: '10-sg', parameters: [string(name: 'ACTION', value: "apply")], wait: false
+            parallel {
+                stage('Alb') {
+                    steps {
+                        build job: '60-alb', parameters: [string(name: 'ACTION', value: "apply")], wait: false
+                    }
+                }
+                stage('Acm') {
+                    steps {
+                        build job: '50-acm', parameters: [string(name: 'ACTION', value: "apply")], wait: false
+                    }
+                }
+                stage('Eks') {
+                    steps {
+                        build job: '40-eks', parameters: [string(name: 'ACTION', value: "apply")], wait: false
+                    }
+                }
+                stage('Bastion') {
+                    steps {
+                        build job: '20-bastion', parameters: [string(name: 'ACTION', value: "apply")], wait: false
+                    }
+                }
+
             }
         }
     }
