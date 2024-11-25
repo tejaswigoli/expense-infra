@@ -15,6 +15,10 @@ We are using bastion as our EKS client, so it will have
 
 * Login to bastion host and get the kubeconfig of EKS cluster
 ```
+aws configure
+```
+
+```
 aws eks update-kubeconfig --region us-east-1 --name expense-dev
 ```
 
