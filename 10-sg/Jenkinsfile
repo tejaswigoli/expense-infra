@@ -55,7 +55,7 @@ pipeline {
                 build job: '00-vpc', parameters: [string(name: 'ACTION', value: "destroy")], wait: false
             }
         }
-        stage('Parallel-1') {
+        stage('Parallel') {
             when {
                 expression { params.ACTION == 'apply' }
             }
@@ -70,11 +70,7 @@ pipeline {
                         build job: '40-eks', parameters: [string(name: 'ACTION', value: "apply")], wait: false
                     }
                 }
-                stage('Acm') {
-                    steps {
-                        build job: '50-acm', parameters: [string(name: 'ACTION', value: "apply")], wait: false
-                    }
-                }
+                
                 stage('ECR') {
                     steps {
                         build job: '70-ecr', parameters: [string(name: 'ACTION', value: "apply")], wait: false
@@ -83,12 +79,17 @@ pipeline {
             }
         }
 
-        stage('Parallel-2') {
+        stage('Sequential') {
             when {
                 expression { params.ACTION == 'apply' }
             }
-            parallel {
-                stage('Alb') {
+            stages {
+                stage('ACM') {
+                    steps {
+                        build job: '50-acm', parameters: [string(name: 'ACTION', value: "apply")], wait: false
+                    }
+                }
+                stage('ALB') {
                     steps {
                         build job: '60-alb', parameters: [string(name: 'ACTION', value: "apply")], wait: false
                     }
@@ -99,6 +100,7 @@ pipeline {
                     }
                 }
             }
+                
         }
 
     }

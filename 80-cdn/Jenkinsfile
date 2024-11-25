@@ -48,7 +48,7 @@ pipeline {
             }
         }
 
-        stage('Parallel-1') {
+        stage('Parallel') {
             when {
                 expression { params.ACTION == 'destroy' }
             }
@@ -58,17 +58,17 @@ pipeline {
                         build job: '70-ecr', parameters: [string(name: 'ACTION', value: "destroy")], wait: false
                     }
                 }
-                stage('Alb') {
+                stage('ALB') {
                     steps {
                         build job: '60-alb', parameters: [string(name: 'ACTION', value: "destroy")], wait: false
                     }
                 }
-                stage('Acm') {
+                stage('ACM') {
                     steps {
                         build job: '50-acm', parameters: [string(name: 'ACTION', value: "destroy")], wait: false
                     }
                 }
-                stage('Eks') {
+                stage('EKS') {
                     steps {
                         build job: '40-eks', parameters: [string(name: 'ACTION', value: "destroy")], wait: false
                     }
@@ -81,16 +81,25 @@ pipeline {
 
             }
         }
-        stage('SG-Destroy'){
-            steps {
-                build job: '10-sg', parameters: [string(name: 'ACTION', value: "destroy")], wait: false
+        stage('Sequential') {
+            when {
+                expression { params.ACTION == 'destroy' }
             }
-        }
-        stage('VPC-Destroy'){
-            steps {
-                build job: '00-vpc', parameters: [string(name: 'ACTION', value: "destroy")], wait: false
+            stages {
+                stage('SG-Destroy'){
+                    steps {
+                        build job: '10-sg', parameters: [string(name: 'ACTION', value: "destroy")], wait: false
+                    }
+                }
+                stage('VPC-Destroy'){
+                    steps {
+                        build job: '00-vpc', parameters: [string(name: 'ACTION', value: "destroy")], wait: false
+                    }
+                }
             }
+                
         }
+        
     }
 
     post {
