@@ -65,7 +65,7 @@ pipeline {
                         build job: '20-bastion', parameters: [string(name: 'ACTION', value: "apply")], wait: false
                     }
                 }
-                stage('Bastion') {
+                stage('RDS') {
                     steps {
                         build job: '30-rds', parameters: [string(name: 'ACTION', value: "apply")], wait: false
                     }
