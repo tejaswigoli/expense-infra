@@ -42,10 +42,10 @@ module "eks" {
 
   eks_managed_node_groups = {
     # blue = {
-    #   min_size      = 2
+    #   min_size      = 3
     #   max_size      = 10
-    #   desired_size  = 2
-    #   #capacity_type = "SPOT"
+    #   desired_size  = 3
+    #   capacity_type = "SPOT"
     #   iam_role_additional_policies = {
     #     AmazonEBSCSIDriverPolicy          = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
     #     AmazonElasticFileSystemFullAccess = "arn:aws:iam::aws:policy/service-role/AmazonEFSCSIDriverPolicy"
@@ -55,10 +55,10 @@ module "eks" {
     #   key_name = aws_key_pair.eks.key_name
     # }
     green = {
-      min_size      = 2
+      min_size      = 3
       max_size      = 10
-      desired_size  = 2
-      #capacity_type = "SPOT"
+      desired_size  = 3
+      capacity_type = "SPOT"
       iam_role_additional_policies = {
         AmazonEBSCSIDriverPolicy          = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
         AmazonElasticFileSystemFullAccess = "arn:aws:iam::aws:policy/AmazonElasticFileSystemFullAccess"
