@@ -39,16 +39,13 @@ pipeline {
                         if [ ${params.ACTION} == 'apply' ]
                         then
                             terraform apply -auto-approve tfplan
-                        elif [ ${params.ACTION} == 'destroy' ]
-                        then
-                            terraform destroy -auto-approve
                         fi
                     """
                 }
             }
         }
 
-        stage('Parallel') {
+        /* stage('Destroy') {
             when {
                 expression { params.ACTION == 'destroy' }
             }
@@ -65,7 +62,7 @@ pipeline {
                 }
                 stage('EKS') {
                     steps {
-                        build job: '40-eks', parameters: [string(name: 'ACTION', value: "destroy")], wait: false
+                        build job: '40-eks', parameters: [string(name: 'ACTION', value: "destroy")], wait: true
                     }
                 }
                 stage('Bastion') {
@@ -75,8 +72,24 @@ pipeline {
                 }
 
             }
+        } */
+        stage('Destroy'){
+            when {
+                expression { params.ACTION == 'destroy' }
+            }
+            steps{
+                withAWS(region: 'us-east-1', credentials: 'aws-creds') {
+                    sh """
+                    for i in 80-cdn 70-ecr 60-alb 50-acm 40-eks 20-bastion 10-sg 00-vpc
+                    do
+                        cd $i
+                        terraform destroy -auto-approve
+                    done
+                    """
+                }
+            }
         }
-        stage('Sequential') {
+        /* stage('Sequential') {
             when {
                 expression { params.ACTION == 'destroy' }
             }
@@ -99,7 +112,7 @@ pipeline {
                 }
             }
                 
-        }
+        } */
         
     }
 
