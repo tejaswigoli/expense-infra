@@ -63,11 +63,6 @@ pipeline {
                         build job: '60-alb', parameters: [string(name: 'ACTION', value: "destroy")], wait: false
                     }
                 }
-                stage('ACM') {
-                    steps {
-                        build job: '50-acm', parameters: [string(name: 'ACTION', value: "destroy")], wait: false
-                    }
-                }
                 stage('EKS') {
                     steps {
                         build job: '40-eks', parameters: [string(name: 'ACTION', value: "destroy")], wait: false
@@ -86,9 +81,15 @@ pipeline {
                 expression { params.ACTION == 'destroy' }
             }
             stages {
+                
+                stage('ACM') {
+                    steps {
+                        build job: '50-acm', parameters: [string(name: 'ACTION', value: "destroy")], wait: false
+                    }
+                }
                 stage('SG-Destroy'){
                     steps {
-                        build job: '10-sg', parameters: [string(name: 'ACTION', value: "destroy")], wait: false
+                        build job: '10-sg', parameters: [string(name: 'ACTION', value: "destroy")], wait: true
                     }
                 }
                 stage('VPC-Destroy'){
