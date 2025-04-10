@@ -14,7 +14,7 @@ data "aws_ami" "Amazon Linux 2023 AMI" {
 	/*owners = ["973714476881"]*/
 	
 	filter {
-		name   = "Amazon Linux 2023 AMI"
+		name   = "name"
 		values = ["01ff9fc7721895c6b"]
 	}
 	
