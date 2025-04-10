@@ -20,7 +20,7 @@ pipeline {
                     sh """
                         cd 00-vpc
                         terraform init -reconfigure
-                        terraform apply -auto-approve -lock=false tfplan
+                        terraform apply -auto-approve -lock=false
                     """
                 }
             }
