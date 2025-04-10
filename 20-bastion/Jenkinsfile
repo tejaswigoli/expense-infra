@@ -5,7 +5,7 @@ pipeline {
     options{
         timeout(time: 30, unit: 'MINUTES')
         disableConcurrentBuilds()
-        ansiColor('xterm')
+    
     }
     // environment {
     //     DEBUG = 'true'
@@ -21,7 +21,7 @@ pipeline {
                     sh """
                         cd 20-bastion
                         terraform init -reconfigure
-                        terraform plan -out=tfplan
+                        terraform plan -lock=false
                     """
                 }
             }
@@ -33,15 +33,15 @@ pipeline {
                 ok "Yes, we should."
             } */
             steps {
-                withAWS(region: 'us-east-1', credentials: 'aws-creds') {
+                withAWS(region: 'eu-west-1', credentials: 'aws-creds') {
                     sh """
                         cd 20-bastion
                         if [ ${params.ACTION} == 'apply' ]
                         then
-                            terraform apply -auto-approve tfplan
+                            terraform apply -auto-approve -lock=false
                         elif [ ${params.ACTION} == 'destroy' ]
                         then
-                            terraform destroy -auto-approve
+                            terraform destroy -auto-approve -lock=false
                         fi
                     """
                 }
