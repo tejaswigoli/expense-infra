@@ -7,14 +7,14 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "81s-remote-state-dev"
+    bucket = "81s-remote-state-teja"
     key    = "expense-vpc"
-    region = "us-east-1"
-    dynamodb_table = "81s-locking-dev"
+    region = "eu-west-1"
+    dynamodb_table = "81s-locking-teja"
   }
 }
 
 provider "aws" {
   # Configuration options
-  region = "us-east-1"
+  region = "eu-west-1"
 }
