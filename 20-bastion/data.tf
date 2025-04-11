@@ -15,7 +15,7 @@ data "aws_ami" "main" {
 	
 	filter {
 		name   = "name"
-		values = ["01ff9fc7721895c6b"]
+		values = ["Amazon Linux 2023 AMI"]
 	}
 	
 	filter {
