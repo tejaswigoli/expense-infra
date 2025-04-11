@@ -38,7 +38,7 @@ pipeline {
                         cd 30-rds
                         if [ ${params.ACTION} == 'apply' ]
                         then
-                            terraform apply -auto-approve tfplan
+                            terraform apply -auto-approve -lock=false
                         elif [ ${params.ACTION} == 'destroy' ]
                         then
                             terraform destroy -auto-approve -lock=false
