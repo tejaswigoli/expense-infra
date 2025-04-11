@@ -8,7 +8,7 @@ data "aws_ssm_parameter" "public_subnet_ids" {
   name = "/${var.project_name}/${var.environment}/public_subnet_ids"
 }
 
-data "aws_ami" "ami.amazon_linux_2023" {
+data "aws_ami" "amazon_linux_2023" {
 
 	most_recent      = true
 	/*owners = ["973714476881"]*/
