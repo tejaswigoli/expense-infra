@@ -11,11 +11,11 @@ data "aws_ssm_parameter" "public_subnet_ids" {
 data "aws_ami" "amazon_linux_2023" {
 
 	most_recent      = true
-	owners = ["amazon"]
+	owners = ["137112412989"]
 	
 	filter {
 		name   = "name"
-		values = ["Amazon_Linux_2023_AMI"]
+		values = ["al2023-ami-*-x86_64"]
 	}
 	
 	filter {
